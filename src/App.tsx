@@ -10,6 +10,10 @@ import Trade from "./pages/Trade";
 import Portfolio from "./pages/Portfolio";
 import QuickActions from "./pages/QuickActions";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import { AuthProvider } from "./components/AuthContext";
+import RequireAuth from "./components/RequireAuth";
 
 const queryClient = new QueryClient();
 
@@ -19,15 +23,24 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/market" element={<Market />} />
-          <Route path="/trade" element={<Trade />} />
-          <Route path="/trade/:id" element={<Trade />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/quick-actions" element={<QuickActions />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            {/* Auth routes - publicly accessible */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            
+            {/* Protected routes - require authentication */}
+            <Route path="/" element={<RequireAuth><Index /></RequireAuth>} />
+            <Route path="/market" element={<RequireAuth><Market /></RequireAuth>} />
+            <Route path="/trade" element={<RequireAuth><Trade /></RequireAuth>} />
+            <Route path="/trade/:id" element={<RequireAuth><Trade /></RequireAuth>} />
+            <Route path="/portfolio" element={<RequireAuth><Portfolio /></RequireAuth>} />
+            <Route path="/quick-actions" element={<RequireAuth><QuickActions /></RequireAuth>} />
+            
+            {/* Fallback route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

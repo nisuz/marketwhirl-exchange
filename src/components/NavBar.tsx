@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Bell, Menu, X, User, Search } from 'lucide-react';
+import { Bell, Menu, X, User, Search, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,11 +10,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useAuth } from './AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const NavBar: React.FC = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   const navItems = [
     { path: '/', label: 'Dashboard' },
@@ -61,26 +64,64 @@ const NavBar: React.FC = () => {
             />
           </div>
           
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-white">
-            <Bell size={20} />
-          </Button>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full bg-secondary h-9 w-9">
-                <User size={18} />
+          {isAuthenticated ? (
+            <>
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-white">
+                <Bell size={20} />
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Help</DropdownMenuItem>
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 p-0 overflow-hidden">
+                    <Avatar>
+                      <AvatarImage src={user?.avatar} alt={user?.name || "User"} />
+                      <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-market-charcoal border-border">
+                  <div className="flex items-center justify-start p-2 border-b border-border">
+                    <Avatar className="h-9 w-9 mr-2">
+                      <AvatarImage src={user?.avatar} alt={user?.name || "User"} />
+                      <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{user?.name || "User"}</span>
+                      <span className="text-xs text-muted-foreground">{user?.email || user?.phone || ""}</span>
+                    </div>
+                  </div>
+                  <DropdownMenuItem asChild>
+                    <Link to="/portfolio" className="cursor-pointer">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/quick-actions" className="cursor-pointer">Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer" onClick={logout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <div className="flex space-x-2">
+              <Button variant="ghost" asChild>
+                <Link to="/login">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/signup">Sign Up</Link>
+              </Button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="flex items-center">
+          {isAuthenticated && (
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-white mr-2">
+              <Bell size={20} />
+            </Button>
+          )}
+          
           <Button
             variant="ghost"
             size="icon"
@@ -106,6 +147,22 @@ const NavBar: React.FC = () => {
                   {item.label}
                 </Link>
               ))}
+              
+              {isAuthenticated ? (
+                <Button variant="destructive" className="mt-2" onClick={logout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Logout</span>
+                </Button>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <Button variant="outline" asChild>
+                    <Link to="/login">Sign In</Link>
+                  </Button>
+                  <Button asChild>
+                    <Link to="/signup">Sign Up</Link>
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
