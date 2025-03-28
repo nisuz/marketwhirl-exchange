@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Market from "./pages/Market";
 import Trade from "./pages/Trade";
 import Portfolio from "./pages/Portfolio";
+import QuickActions from "./pages/QuickActions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/trade" element={<Trade />} />
           <Route path="/trade/:id" element={<Trade />} />
           <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/quick-actions" element={<QuickActions />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

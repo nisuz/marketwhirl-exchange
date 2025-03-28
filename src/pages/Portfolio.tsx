@@ -6,6 +6,7 @@ import OrderHistory from '@/components/OrderHistory';
 import { useQuery } from '@tanstack/react-query';
 import { getMarketData } from '@/services/marketService';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from 'react-router-dom';
 
 const Portfolio: React.FC = () => {
   return (
@@ -21,24 +22,27 @@ const Portfolio: React.FC = () => {
           </div>
           
           <div className="market-card">
-            <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Quick Actions</h2>
+              <Link to="/quick-actions" className="text-accent text-sm hover:underline">View All</Link>
+            </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
+              <Link to="/quick-actions?tab=deposit" className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
                 <div className="text-3xl mb-2">💰</div>
                 <div className="font-medium">Deposit</div>
-              </div>
-              <div className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
+              </Link>
+              <Link to="/quick-actions?tab=withdraw" className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
                 <div className="text-3xl mb-2">💸</div>
                 <div className="font-medium">Withdraw</div>
-              </div>
-              <div className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
+              </Link>
+              <Link to="/quick-actions?tab=trade" className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
                 <div className="text-3xl mb-2">🔄</div>
                 <div className="font-medium">Trade</div>
-              </div>
-              <div className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
+              </Link>
+              <Link to="/quick-actions?tab=analytics" className="bg-market-charcoal p-4 rounded-md text-center hover:bg-market-charcoal/80 transition-colors cursor-pointer">
                 <div className="text-3xl mb-2">📊</div>
                 <div className="font-medium">Analytics</div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
